@@ -38,8 +38,8 @@
     "start": "next start",
     "lint": "next lint",
     "auth:setup": "pnpm tsx password-auth-setup.ts",
-    "generate:edgeql": "npx @edgedb/generate edgeql-js --output-dir ./db/edgeql-js",
-    "generate:interfaces": "npx @edgedb/generate interfaces --file ./db/types.ts",
+    "generate:edgeql": "npx @edgedb/generate edgeql-js --output-dir ./db/edgedb/js",
+    "generate:interfaces": "npx @edgedb/generate interfaces --file ./db/edgedb/types.ts",
     "generate:all": "pnpm generate:edgeql && pnpm generate:interfaces"
   }
 }
