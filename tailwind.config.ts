@@ -2,11 +2,7 @@ import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
 
 const config: Config = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./components/**/*.{ts,tsx,mdx}", "./app/**/*.{ts,tsx,mdx}"],
   theme: {
     extend: {
       backgroundImage: {
@@ -24,4 +20,5 @@ const config: Config = {
   },
   plugins: [require("@tailwindcss/forms")],
 };
+
 export default config;
