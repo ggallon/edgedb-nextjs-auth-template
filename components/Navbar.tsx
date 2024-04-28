@@ -1,50 +1,42 @@
-'use client'
+"use client";
 
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Fragment, useTransition } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
   BuildingStorefrontIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline'
-import { classNames } from '../src/utils'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { handleSignOut } from "@/app/actions";
+import { classNames } from "@/src/utils";
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'Page #1', href: '#', current: false },
-  { name: 'Page #2', href: '#', current: false },
-]
+  { name: "Dashboard", href: "/dashboard", current: true },
+  { name: "Page #1", href: "#", current: false },
+  { name: "Page #2", href: "#", current: false },
+];
 
-export default function Navbar({
-  onSignOut,
-}: {
-  signedIn: boolean
-  onSignOut: () => Promise<void>
-}) {
-  const router = useRouter()
+export default function Navbar() {
+  const [isPending, startTransition] = useTransition();
 
-  const handleSignOut = async () => {
-    await onSignOut()
-
-    router.push('/')
-  }
+  const onClickSignOut = () => {
+    startTransition(async () => {
+      await handleSignOut();
+    });
+  };
 
   return (
-    <Disclosure
-      as="nav"
-      className="border-b border-gray-200 bg-white"
-    >
+    <Disclosure as="nav" className="border-b border-gray-200 bg-white">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
-                <div className="flex flex-shrink-0 items-center mt-2">
+                <div className="mt-2 flex shrink-0 items-center">
                   <Link href="/">
-                    <BuildingStorefrontIcon className="h-8 w-auto lg:block text-primary" />
+                    <BuildingStorefrontIcon className="h-8 w-auto text-primary lg:block" />
                   </Link>
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -54,11 +46,11 @@ export default function Navbar({
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? 'border-primary text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium'
+                          ? "border-primary text-gray-900"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                        "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium",
                       )}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.current ? "page" : undefined}
                     >
                       {item.name}
                     </a>
@@ -66,15 +58,12 @@ export default function Navbar({
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                <Menu
-                  as="div"
-                  className="relative ml-3"
-                >
+                <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <UserCircleIcon className="h-8 w-8 text-gray-400 hover:text-gray-500" />
+                      <UserCircleIcon className="size-8 text-gray-400 hover:text-gray-500" />
                     </Menu.Button>
                   </div>
                   <Transition
@@ -86,7 +75,7 @@ export default function Navbar({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-md ring-1 ring-black/5 focus:outline-none">
                       <Disclosure.Button
                         key="Your Profile"
                         as="a"
@@ -98,8 +87,9 @@ export default function Navbar({
                       <Disclosure.Button
                         key="Sign out"
                         as="button"
-                        className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                        onClick={handleSignOut}
+                        className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                        onClick={onClickSignOut}
+                        disabled={isPending}
                       >
                         Sign out
                       </Disclosure.Button>
@@ -112,15 +102,9 @@ export default function Navbar({
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XMarkIcon
-                      className="block h-6 w-6"
-                      aria-hidden="true"
-                    />
+                    <XMarkIcon className="block size-6" aria-hidden="true" />
                   ) : (
-                    <Bars3Icon
-                      className="block h-6 w-6"
-                      aria-hidden="true"
-                    />
+                    <Bars3Icon className="block size-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -136,11 +120,11 @@ export default function Navbar({
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? 'border-primary bg-gray-50 text-primary'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                    'block border-l-4 py-2 pl-3 pr-4 text-base font-medium'
+                      ? "border-primary bg-gray-50 text-primary"
+                      : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                    "block border-l-4 py-2 pl-3 pr-4 text-base font-medium",
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -148,8 +132,8 @@ export default function Navbar({
             </div>
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <UserCircleIcon className="h-8 w-8 text-gray-400 hover:text-gray-500" />
+                <div className="shrink-0">
+                  <UserCircleIcon className="size-8 text-gray-400 hover:text-gray-500" />
                 </div>
               </div>
               <div className="mt-3 space-y-1">
@@ -164,8 +148,9 @@ export default function Navbar({
                 <Disclosure.Button
                   key="Sign out"
                   as="button"
-                  className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                  onClick={handleSignOut}
+                  className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                  onClick={onClickSignOut}
+                  disabled={isPending}
                 >
                   Sign out
                 </Disclosure.Button>
@@ -175,5 +160,5 @@ export default function Navbar({
         </>
       )}
     </Disclosure>
-  )
+  );
 }

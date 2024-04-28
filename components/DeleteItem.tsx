@@ -1,32 +1,49 @@
 "use client";
 
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { useFormState, useFormStatus } from "react-dom";
+import { deleteItem } from "@/app/actions";
+import { type Item } from "@/db/edgedb/types";
+import { classNames } from "@/src/utils";
 
-export default function DeleteItem({
-  item,
-  handleDelete,
-}: {
-  item: { id: string };
-  handleDelete: (id: string) => Promise<string | null>;
-}) {
-  const router = useRouter();
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
   return (
     <button
-      type="button"
-      className="text-sm font-semibold text-red-600 mt-2"
-      onClick={async () => {
-        const error = await handleDelete(item.id);
-        if (error) {
-          alert(error);
-          return;
-        }
-
-        router.refresh();
-      }}
+      type="submit"
+      aria-label="Delete item"
+      aria-disabled={pending}
+      className={classNames(
+        pending && "cursor-not-allowed",
+        "mt-2 text-sm font-semibold text-red-600",
+      )}
     >
-      <TrashIcon className="w-4 h-4" />
-      <span className="sr-only">Delete</span>
+      {pending ? (
+        <span>Loading...</span>
+      ) : (
+        <>
+          <TrashIcon className="size-4" />
+          <span className="sr-only">Delete</span>
+        </>
+      )}
     </button>
+  );
+}
+
+export function DeleteItemButton({ itemId }: { itemId: Item["id"] }) {
+  const [formState, formAction] = useFormState(deleteItem, {
+    success: true,
+    message: "",
+  });
+
+  return (
+    <form action={formAction}>
+      <input type="hidden" name="itemId" value={itemId} />
+      <SubmitButton />
+      <p aria-live="polite" className="sr-only" role="status">
+        {formState.success}
+      </p>
+    </form>
   );
 }

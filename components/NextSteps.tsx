@@ -22,7 +22,7 @@ const timeline = [
         <img
           src="sign-up.png"
           alt="Sign up"
-          className="my-4 rounded-md shadow-md shadow-slate-50 w-60"
+          className="my-4 w-60 rounded-md shadow-md shadow-slate-50"
         />
       </div>
     ),
@@ -106,7 +106,7 @@ const itemsQuery = e.select(e.Item, (_item) => ({
         <img
           src="reset-password.png"
           alt="Reset password"
-          className="my-4 rounded-md shadow-md shadow-slate-50 h-60"
+          className="my-4 h-60 rounded-md shadow-md shadow-slate-50"
         />
       </div>
     ),
@@ -120,7 +120,7 @@ const itemsQuery = e.select(e.Item, (_item) => ({
         Open the <code>components/AddItem.tsx</code> file and update the form to
         include your new fields. You can add a new field to the form or change
         the existing fields to include your new data.
-        <div className="my-4 rounded-md shadow-md shadow-slate-50 bg-white p-4">
+        <div className="my-4 rounded-md bg-white p-4 shadow-md shadow-slate-50">
           <img src="new-item.png" alt="Add item form" className="w-96" />
         </div>
       </div>
@@ -165,17 +165,8 @@ const itemsQuery = e.select(e.Item, (_item) => ({
         Once you're happy with your changes, you can deploy your app to the
         EdgeDB Cloud and Vercel. Follow the deployment instructions in the{" "}
         <a
-          className="
-          text-primary
-          hover:underline
-          focus:ring-2
-          focus:ring-offset-2
-          focus:ring-primary
-          focus:ring-offset-white
-          focus:outline-none
-          focus:ring-opacity-60
-        "
-          href='"https://docs.edgedb.com/guides/tutorials/nextjs_app_router#deploying-to-vercel"'
+          className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-white"
+          href="https://docs.edgedb.com/guides/tutorials/nextjs_app_router#deploying-to-vercel"
         >
           EdgeDB documentation
         </a>
@@ -189,7 +180,7 @@ const itemsQuery = e.select(e.Item, (_item) => ({
 export default function NextSteps() {
   return (
     <div className="">
-      <h2 className="text-center text-2xl mb-6 font-bold tracking-tight text-gray-900 sm:text-3xl">
+      <h2 className="mb-6 text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
         Next Steps
       </h2>
       <div className="flow-root" suppressHydrationWarning>
@@ -204,14 +195,14 @@ export default function NextSteps() {
                   />
                 ) : null}
                 <div className="relative flex space-x-3">
-                  <span className="bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center ring-8 ring-white">
+                  <span className="flex size-10 items-center justify-center rounded-full bg-gray-700 ring-8 ring-white">
                     <step.icon
-                      className="h-5 w-5 text-white"
+                      className="size-5 text-white"
                       aria-hidden="true"
                     />
                   </span>
-                  <div className="flex flex-col min-w-0 flex-1 pt-2">
-                    <p className="text-sm text-gray-700 font-semibold">
+                  <div className="flex min-w-0 flex-1 flex-col pt-2">
+                    <p className="text-sm font-semibold text-gray-700">
                       {step.content}
                     </p>
                     <div className="mt-2 text-sm text-gray-500">

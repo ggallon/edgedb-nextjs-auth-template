@@ -1,11 +1,9 @@
-import { auth } from "@/edgedb";
 import Link from "next/link";
 import NextSteps from "@/components/NextSteps";
+import { edgedbAuth } from "@/db/edgedb/client";
 
 export default async function Home() {
-  const session = auth.getSession();
-
-  const signedIn = await session.isSignedIn();
+  const signedIn = await edgedbAuth.getSession().isSignedIn();
 
   return (
     <div>
@@ -18,18 +16,18 @@ export default async function Home() {
             {!signedIn ? (
               <>
                 <Link
-                  href={auth.getBuiltinUIUrl()}
+                  href={edgedbAuth.getBuiltinUIUrl()}
                   className="text-sm font-semibold leading-6 text-gray-800"
                 >
-                  <button className="ring-2 ring-inset ring-primary bg-primarylight px-4 py-2 rounded-md">
+                  <button className="rounded-md bg-primarylight px-4 py-2 ring-2 ring-inset ring-primary">
                     Sign in
                   </button>
                 </Link>
                 <Link
-                  href={auth.getBuiltinUISignUpUrl()}
+                  href={edgedbAuth.getBuiltinUISignUpUrl()}
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
-                  <button className="bg-primary px-4 py-2 rounded-md text-white">
+                  <button className="rounded-md bg-primary px-4 py-2 text-white">
                     Sign up
                   </button>
                 </Link>
@@ -39,7 +37,7 @@ export default async function Home() {
                 href="dashboard"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
-                <button className="bg-primary px-4 py-2 rounded-md text-white">
+                <button className="rounded-md bg-primary px-4 py-2 text-white">
                   Dashboard
                 </button>
               </Link>

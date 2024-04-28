@@ -1,30 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { addItem } from "@/app/actions";
+import { classNames } from "@/src/utils";
 
-export default function AddItem({
-  addItem,
-}: {
-  addItem: (name: string) => Promise<void>;
-}) {
-  const [itemName, setItemName] = useState("");
-  const router = useRouter();
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        await addItem(itemName);
-        setItemName("");
-        router.refresh();
-      }}
+    <button
+      type="submit"
+      onClick={(e: React.FormEvent<HTMLButtonElement>) =>
+        pending && e.preventDefault()
+      }
+      aria-label="Add item"
+      aria-disabled={pending}
+      className={classNames(
+        pending && "cursor-not-allowed",
+        "rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+      )}
     >
+      {pending ? <span>Loading...</span> : <span>Save</span>}
+    </button>
+  );
+}
+
+export default function AddItem() {
+  const [_, formAction] = useFormState(addItem, {
+    success: true,
+    message: "",
+  });
+
+  return (
+    <form action={formAction}>
       <div className="space-y-12">
-        <div className="pb-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold leading-1 text-gray-900">
-            New Item
-          </h2>
+        <div className="border-b border-gray-200 pb-4">
+          <h2 className="text-xl font-semibold text-gray-900">New Item</h2>
 
           <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
@@ -40,10 +52,9 @@ export default function AddItem({
                     type="text"
                     name="name"
                     id="name"
+                    required
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     placeholder="test item"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
               </div>
@@ -61,12 +72,7 @@ export default function AddItem({
             Cancel
           </button>
         </Link>
-        <button
-          type="submit"
-          className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        >
-          Save
-        </button>
+        <SubmitButton />
       </div>
     </form>
   );

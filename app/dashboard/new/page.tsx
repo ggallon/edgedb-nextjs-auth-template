@@ -1,30 +1,24 @@
-import AddItem from "@/components/AddItem";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
-import e from "@/dbschema/edgeql-js";
-import { auth } from "@/edgedb";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import AddItem from "@/components/AddItem";
+import { edgedbAuth } from "@/db/edgedb/client";
 
-const addItem = async (name: string) => {
-  "use server";
-  const session = auth.getSession();
+export default async function New() {
+  const isSignedIn = await edgedbAuth.getSession().isSignedIn();
+  if (!isSignedIn) {
+    redirect(edgedbAuth.getBuiltinUIUrl());
+  }
 
-  const newItemQuery = e.insert(e.Item, {
-    name,
-  });
-
-  newItemQuery.run(session.client);
-};
-
-export default function Example() {
   return (
     <>
       <Link href="/dashboard">
         <button className="text-xs leading-6 text-gray-900">
-          <ArrowLeftIcon className="h-4 w-4 inline-block" /> Back
+          <ArrowLeftIcon className="inline-block size-4" /> Back
         </button>
       </Link>
       <div className="mt-4">
-        <AddItem addItem={addItem} />
+        <AddItem />
       </div>
     </>
   );
