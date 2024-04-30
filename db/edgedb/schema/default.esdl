@@ -11,10 +11,12 @@ module default {
   );
 
   type User {
-    required identity: ext::auth::Identity;
+    required identity: ext::auth::Identity {
+      constraint exclusive;
+    };
     required name: str;
     email: str;
-  
+
     userRole: Role {
       default := "user";
     };
