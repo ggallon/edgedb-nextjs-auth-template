@@ -18,7 +18,7 @@ module default {
     required name: str;
 
     userRole: Role {
-      default := "user";
+      default := Role.user;
     };
 
     created: datetime {
